@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>The June Edit: Earth Day Special</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 200vh;
+      background-color: black;
+      font-family: sans-serif;
+      color: white;
+      overflow-x: hidden;
+    }
+    #api-frame {
+      width: 100%;
+      height: 100vh;
+      border: none;
+      display: block;
+    }
+    .headline {
+      position: absolute;
+      top: 30%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      font-size: 2em;
+      text-shadow: 0 0 10px cyan;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="headline">The June Edit: Earth Day Special</div>
+
+  <iframe id="api-frame" allow="autoplay; fullscreen" frameborder="0"></iframe>
+
+  <script src="https://static.sketchfab.com/api/sketchfab-viewer-1.12.0.js"></script>
+  <script>
+    const iframe = document.getElementById('api-frame');
+    const client = new Sketchfab('1.12.0', iframe);
+
+    client.init('3684eb40fb7e42208089874e6286b9e9', {
+      autostart: 1,
+      ui_infos: 0,
+      ui_controls: 0,
+      ui_watermark: 0,
+      success: function(api) {
+        api.addEventListener('viewerready', function() {
+          window.addEventListener('scroll', () => {
+            const scrollPos = window.scrollY * 0.003;
+            const x = Math.sin(scrollPos) * 3;
+            const z = Math.cos(scrollPos) * 3;
+            api.setCameraLookAt([x, 0, z], [0, 0, 0], 0.1);
+          });
+        });
+      },
+      error: function() {
+        console.error('Sketchfab API error');
+      }
+    });
+  </script>
+</body>
+</html>
