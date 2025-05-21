@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -37,7 +38,7 @@
 
   <iframe
     id="api-frame"
-    src="https://sketchfab.com/models/3684eb40fb7e42208089874e6286b9e9/embed"
+    src="https://sketchfab.com/models/3684eb40fb7e42208089874e6286b9e9/embed?autostart=1&ui_infos=0&ui_controls=0&ui_watermark=0"
     allow="autoplay; fullscreen"
     frameborder="0">
   </iframe>
@@ -54,12 +55,15 @@
       ui_watermark: 0,
       success: function(api) {
         api.addEventListener('viewerready', function() {
+          // Start animation
           api.play();
 
+          // Lock the camera view
           api.getCameraLookAt((camera) => {
             api.setCameraLookAt(camera.position, camera.target, 0);
           });
 
+          // Use scroll to control animation speed
           window.addEventListener('scroll', () => {
             const scrollY = window.scrollY;
             let speed = scrollY * 0.001;
