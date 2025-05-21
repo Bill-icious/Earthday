@@ -1,35 +1,76 @@
-<script src="https://static.sketchfab.com/api/sketchfab-viewer-1.12.0.js"></script>
-<script>
-  const iframe = document.getElementById('api-frame');
-  const client = new Sketchfab('1.12.0', iframe);
 
-  client.init('3684eb40fb7e42208089874e6286b9e9', {
-    autostart: 1,
-    ui_infos: 0,
-    ui_controls: 0,
-    ui_watermark: 0,
-    success: function(api) {
-      api.addEventListener('viewerready', function() {
-        // Play the default animation
-        api.play();
-
-        // Optionally, lock the camera once
-        api.getCameraLookAt((camera) => {
-          api.setCameraLookAt(camera.position, camera.target, 0); // lock current view
-        });
-
-        // Use scroll to control animation speed
-        window.addEventListener('scroll', () => {
-          const scrollY = window.scrollY;
-          let speed = scrollY * 0.001; // Adjust factor for sensitivity
-          speed = Math.min(Math.max(speed, 0.1), 2); // clamp between 0.1x and 2x
-
-          api.setAnimationSpeed(speed);
-        });
-      });
-    },
-    error: function() {
-      console.error('Sketchfab API error');
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>The June Edit: Earth Day Special</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 200vh;
+      background-color: black;
+      font-family: sans-serif;
+      color: white;
+      overflow-x: hidden;
     }
-  });
-</script>
+    #api-frame {
+      width: 100%;
+      height: 100vh;
+      border: none;
+      display: block;
+    }
+    .headline {
+      position: absolute;
+      top: 30%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      font-size: 2em;
+      text-shadow: 0 0 10px cyan;
+      pointer-events: none;
+      z-index: 10;
+    }
+  </style>
+</head>
+<body>
+  <div class="headline">The June Edit: Earth Day Special</div>
+
+  <iframe id="api-frame" allow="autoplay; fullscreen" frameborder="0"></iframe>
+
+  <script src="https://static.sketchfab.com/api/sketchfab-viewer-1.12.0.js"></script>
+  <script>
+    const iframe = document.getElementById('api-frame');
+    const client = new Sketchfab('1.12.0', iframe);
+
+    client.init('3684eb40fb7e42208089874e6286b9e9', {
+      autostart: 1,
+      ui_infos: 0,
+      ui_controls: 0,
+      ui_watermark: 0,
+      success: function(api) {
+        api.addEventListener('viewerready', function() {
+          // Play the native rotation animation
+          api.play();
+
+          // Lock camera to current view
+          api.getCameraLookAt((camera) => {
+            api.setCameraLookAt(camera.position, camera.target, 0);
+          });
+
+          // Adjust animation speed based on scroll
+          window.addEventListener('scroll', () => {
+            const scrollY = window.scrollY;
+            let speed = scrollY * 0.001;
+            speed = Math.min(Math.max(speed, 0.1), 2); // clamp between 0.1x and 2x
+            api.setAnimationSpeed(speed);
+          });
+        });
+      },
+      error: function() {
+        console.error('Sketchfab API error');
+      }
+    });
+  </script>
+</body>
+</html>
